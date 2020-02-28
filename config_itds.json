@@ -1,0 +1,11 @@
+{ "secrets" :
+	              {
+	                "account"   : "abs_itds_dev.east-us-2.azure",
+	                "user"      : "syue003@safeway.com",
+	                "warehouse" : "LOAD_WH",	             
+	                "database"  : "EDM_CONFIRMED_DEV",
+	                "schema"    : "SCRATCH",
+	                "password"  : "Chungli$1"
+	                
+	              }
+	}
