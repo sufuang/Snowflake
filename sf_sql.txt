@@ -1,0 +1,66 @@
+01-08-20
+
+
+select count(*) from EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+select StorePhoneNbr,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by StorePhoneNbr order by StorePhoneNbr
+
+select Name,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by Name order by Name
+
+
+select CompanyNbr,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by CompanyNbr
+order by CompanyNbr
+select StoreNm,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by StoreNm order by StoreNm
+select SectionCd,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by SectionCd order by SectionCd
+
+select DistrictId,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by DistrictId order by DistrictId
+
+select DistrictNm,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by DistrictNm order by DistrictNm
+
+select top 1 *  from EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+
+select *  from EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT
+
+select StoreData_RetailStoreId,  count(*) from  EDM_REFINED_DEV.SCRATCH.GETRETAILSTORE_FLAT group by StoreData_RetailStoreId order by StoreData_RetailStoreId
+SELECT	SRC_XML:"@"::string AS BODNm
+,XMLGET(DocumentData.value,'Abs:DocumentID'):"$"::string AS DocumentID
+	 	,XMLGET(DocumentData.value,'Abs:AlternateDocumentID'):"$"::string AS AlternateDocumentID
+	 	,XMLGET(DocumentData.value,'Abs:InboundOutboundInd'):"$"::string AS InboundOutboundInd
+        
+	 	,XMLGET(DocumentData.value,'Abs:DocumentNm'):"$"::string AS DocumentNm
+	 	,XMLGET(DocumentData.value,'Abs:CreationDt'):"$"::string AS CreationDt
+	 	,XMLGET(DocumentData.value,'Abs:Description'):"$"::string AS Document_Description
+	 	,XMLGET(DocumentData.value,'Abs:SourceApplicationCd'):"$"::string AS SourceApplicationCd
+	 	,XMLGET(DocumentData.value,'Abs:TargetApplicationCd'):"$"::string AS TargetApplicationCd
+	 	,XMLGET(DocumentData.value,'Abs:Note'):"$"::string AS Note  
+        
+	 	,XMLGET(DocumentData.value,'Abs:GatewayNm'):"$"::string AS GatewayNm
+	 	,XMLGET(DocumentData.value,'Abs:SenderId'):"$"::string AS SenderId
+	 	,XMLGET(DocumentData.value,'Abs:ReceiverId'):"$"::string AS ReceiverId
+	 	,XMLGET(DocumentData.value,'Abs:RoutingSystemNm'):"$"::string AS RoutingSystemNm
+	 	,XMLGET(DocumentData.value,'Abs:InternalFileTransferInd'):"$"::string AS InternalFileTransferInd
+	 	,XMLGET(DocumentData.value,'Abs:InterchangeDate'):"$"::string AS InterchangeDate
+	 	,XMLGET(DocumentData.value,'Abs:InterchangeTime'):"$"::string AS InterchangeTime
+	 	,XMLGET(DocumentData.value,'Abs:ExternalTargetInd'):"$"::string AS ExternalTargetInd   
+
+	 	,GetRetailStore.SEQ::integer as SEQ
+	 	,GetRetailStore.index::integer as idx
+        
+	 FROM	EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE tbl
+	 	,LATERAL FLATTEN(tbl.SRC_XML:"$") GetRetailStore
+	 	,LATERAL FLATTEN(GetRetailStore.value:"$") DocumentData
+	 WHERE	GetRetailStore.value like '<DocumentData>%'
+	 AND	DocumentData.value like '<Document>%'
+
+	 SELECT	SRC_XML:"@" from  EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+     
+     SELECT src_xml:"$" FROM EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+     
+     select xmlget(src_xml,'OrgEntityNm') FROM EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+     
+          select xmlget(src_xml,'OrgEntityNm', 1) FROM EDM_REFINED_DEV.SCRATCH.ESED_RETAILSTORE
+          
+          
+create or replace table EDM_REFINED_DEV.SCRATCH.YUE_XML (src VARIANT)   
+copy into EDM_REFINED_DEV.SCRATCH.YUE_XML from 'https://github.com/sufuang/Python/blob/master/yue_xml.xml'
+file_format = (TYPE = XML)
+
